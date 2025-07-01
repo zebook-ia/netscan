@@ -1,0 +1,120 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Scanner de Rede Modular v4.0 - Cursor Rules
+
+## Contexto do Projeto
+Este é um scanner de rede avançado desenvolvido em Python, especializado para macOS M3 com 8GB RAM. O sistema realiza reconhecimento completo de dispositivos em redes locais usando Nmap e análise OUI.
+
+## Arquitetura do Sistema
+O código está organizado em 6 módulos principais:
+1. **MÓDULO 1**: Classes de dados e configurações (DeviceInfo, NetworkConfig, ScannerConfig)
+2. **MÓDULO 2**: Utilitários e verificações (ColorManager, EnvironmentChecker)
+3. **MÓDULO 3**: Detecção de rede (NetworkDetector)
+4. **MÓDULO 4**: Scanner de dispositivos (DeviceScanner)
+5. **MÓDULO 5**: Geração de relatórios (ReportGenerator)
+6. **MÓDULO 6**: Classe principal (NetworkScannerMain)
+
+## Padrões de Código
+- Use type hints em todas as funções e métodos
+- Utilize dataclasses para estruturas de dados
+- Mantenha docstrings descritivas para classes e métodos complexos
+- Implemente tratamento de exceções robusto com timeouts
+- Use ThreadPoolExecutor para operações paralelas (máximo 4 threads)
+- Prefira subprocess.run() com timeout para comandos externos
+
+## Dependências Principais
+- Python 3.7+
+- nmap (sistema - via Homebrew)
+- colorama (formatação de cores)
+- tqdm (barras de progresso)
+- pathlib, subprocess, threading, concurrent.futures (stdlib)
+
+## Configurações de Performance
+- MAX_THREADS = 4 (otimizado para M3 8GB)
+- NMAP_TIMING = "T3" (balanceado)
+- HOST_TIMEOUT = "30s"
+- MAX_RETRIES = 2
+
+## Convenções de Nomenclatura
+- Classes: PascalCase (ex: DeviceScanner)
+- Métodos/funções: snake_case (ex: scan_device_detailed)
+- Constantes: UPPER_SNAKE_CASE (ex: MAX_THREADS)
+- Variáveis: snake_case (ex: active_hosts)
+
+## Base de Dados OUI
+Mantenha a base OUI_DATABASE atualizada com novos fabricantes. Formato:
+```python
+"XX:XX:XX": "Fabricante Dispositivo"
+```
+
+## Tratamento de Erros
+- Sempre use try/except com timeouts para comandos subprocess
+- Implemente fallbacks para funcionalidades não-críticas (colorama, tqdm)
+- Retorne objetos DeviceInfo com informações de erro quando scans falham
+- Use logging implícito através do ColorManager para feedback visual
+
+## Patterns de Scanning
+- Ping sweep antes do scan detalhado
+- Scan de portas comuns (lista predefinida)
+- Identificação por MAC address com fallback
+- Coleta de hostname, OS fingerprint e serviços
+- Medição de tempo de resposta
+
+## Geração de Relatórios
+- Sempre gerar TXT e JSON
+- Usar timestamps no formato YYYYMMDD_HHMMSS
+- Incluir metadados completos (rede, configuração, estatísticas)
+- Organizar por categorias de dispositivos
+
+## Comandos Nmap Comuns
+```bash
+# Ping sweep
+nmap -sn -T3 --host-timeout 30s [network]
+
+# Scan detalhado
+nmap -sS -sV -O --osscan-guess -T3 --host-timeout 30s --max-retries 2 -p [ports] [ip]
+```
+
+## Verificações de Ambiente
+Sempre verificar:
+- Versão Python (>= 3.7)
+- Instalação e versão do Nmap
+- Dependências Python (colorama, tqdm)
+- Compatibilidade macOS
+- Permissões de rede
+
+## Estrutura de Saída
+```
+network_scan_results/
+├── network_scan_YYYYMMDD_HHMMSS.txt
+└── network_scan_YYYYMMDD_HHMMSS.json
+```
+
+## Código de Cores (ColorManager)
+- Verde: sucesso/confirmação
+- Vermelho: erro/falha
+- Amarelo: aviso/informação
+- Azul: informação geral
+- Ciano: detalhes técnicos
+- Magenta: destacar elementos
+
+## Threading e Performance
+- Use ThreadPoolExecutor para scans paralelos
+- Limite threads para não sobrecarregar o sistema
+- Implemente progress tracking com tqdm quando disponível
+- Meça tempos de execução para otimização
+
+## Segurança e Ética
+- Sempre solicitar confirmação antes de executar scans
+- Incluir avisos sobre uso responsável
+- Verificar permissões antes de scans privilegiados
+- Documentar claramente o propósito de cada operação
+
+## Debugging
+- Use subprocess capture_output=True para debugging
+- Implemente verbose mode através do ColorManager
+- Salve outputs de comando para análise de falhas
+- Include stack traces em objetos de erro

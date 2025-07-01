@@ -1,0 +1,24 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Estrutura do Projeto: Scanner de Rede Modular
+
+O ponto de entrada principal do projeto é o arquivo [main.py](mdc:main.py). Este arquivo coordena todo o processo de reconhecimento de rede, incluindo:
+
+- Verificação de ambiente e dependências (Python, nmap, colorama, tqdm)
+- Detecção automática da configuração de rede (interface, gateway, IP, máscara, DNS)
+- Varredura de dispositivos ativos na rede
+- Coleta detalhada de informações de cada dispositivo (MAC, fabricante, tipo, portas, serviços, SO)
+- Geração de relatórios em TXT e JSON
+
+O projeto é modularizado em classes dentro do próprio [main.py](mdc:main.py):
+- **DeviceInfo, NetworkConfig, ScannerConfig**: Estruturas de dados e configurações
+- **ColorManager, EnvironmentChecker**: Utilitários de ambiente e saída colorida
+- **NetworkDetector**: Detecção automática da rede local
+- **DeviceScanner**: Descoberta e análise detalhada de dispositivos
+- **ReportGenerator**: Geração e exibição de relatórios
+- **NetworkScannerMain**: Classe principal que orquestra todo o fluxo
+
+O projeto foi otimizado para macOS (especialmente M3 com 8GB RAM) e depende de nmap, colorama e tqdm. O arquivo [pyproject.toml](mdc:pyproject.toml) gerencia as dependências Python. O [README.md](mdc:README.md) traz instruções de uso e requisitos.

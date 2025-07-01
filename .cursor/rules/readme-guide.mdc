@@ -1,0 +1,18 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Guia do README.md
+
+O arquivo [README.md](mdc:README.md) contém:
+
+- Instruções detalhadas de instalação para macOS, incluindo uso do Homebrew para instalar o nmap e do UV para dependências Python.
+- Comandos para instalar dependências com `uv pip install colorama tqdm` e, opcionalmente, via requirements.txt.
+- Passos para execução do scanner, tanto em modo normal quanto como root (recomendado para scans completos).
+- Explicação dos recursos do scanner, exemplos de saída e detalhes sobre os relatórios gerados.
+- Seção de solução de problemas, incluindo dicas para o erro `dnet: Failed to open device en0` e dependências ausentes.
+- Estrutura do projeto e diretórios relevantes.
+- Aviso de uso responsável e informações de licença.
+
+Consulte o README.md para qualquer dúvida sobre instalação, execução ou solução de problemas do projeto.
