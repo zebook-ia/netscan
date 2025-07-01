@@ -338,7 +338,7 @@ class EnvironmentChecker:
         else:
             self.issues.append("colorama não instalado")
             print(self.cm.red("❌ colorama não instalado"))
-            print(self.cm.yellow("💡 Instale com: pip3 install colorama"))
+            print(self.cm.yellow("💡 Instale com: uv pip install colorama"))
             dependencies_ok = False
         
         # Verificar tqdm
@@ -347,7 +347,7 @@ class EnvironmentChecker:
         else:
             self.issues.append("tqdm não instalado")
             print(self.cm.red("❌ tqdm não instalado"))
-            print(self.cm.yellow("💡 Instale com: pip3 install tqdm"))
+            print(self.cm.yellow("💡 Instale com: uv pip install tqdm"))
             dependencies_ok = False
         
         return dependencies_ok
@@ -1302,7 +1302,7 @@ if __name__ == "__main__":
     
     if missing_deps:
         print(f"❌ Dependências faltando: {', '.join(missing_deps)}")
-        print(f"💡 Instale com: pip3 install {' '.join(missing_deps)}")
+        print(f"💡 Instale com: uv pip install {' '.join(missing_deps)}")
         sys.exit(1)
     
     # Inicializar e executar
