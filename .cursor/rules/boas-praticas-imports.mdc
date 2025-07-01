@@ -1,0 +1,13 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Boas Práticas de Importação de Módulos
+
+Todas as importações de módulos devem ser feitas no topo do arquivo, nunca dentro de funções ou métodos. Isso segue as boas práticas Python, melhora a eficiência e facilita a leitura do código.
+
+Exemplo aplicado em [main.py](mdc:main.py):
+- O módulo `ipaddress` foi movido para o topo do arquivo, eliminando importações internas em funções como `calculate_network_range` e `ping_sweep_fallback`.
+
+Sempre revise e centralize as importações para garantir clareza e performance.
