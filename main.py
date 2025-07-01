@@ -105,127 +105,40 @@ class ScannerConfig:
         5353, 631, 62078, 49152, 49153, 49154
     ]
     
-    # Base de dados OUI (Organizationally Unique Identifier) expandida
-    OUI_DATABASE = {
-        # Apple
-        "00:1B:63": "Apple iPhone/iPad",
-        "00:26:BB": "Apple AirPort",
-        "00:23:DF": "Apple MacBook",
-        "28:CD:C1": "Apple iPhone",
-        "84:F3:EB": "Apple MacBook",
-        "D8:3A:DD": "Apple iPhone",
-        "48:D7:05": "Apple iMac",
-        "98:01:A7": "Apple MacBook Pro",
-        "E4:CE:8F": "Apple iPad",
-        "10:9A:DD": "Apple AirPods",
-        "4C:57:CA": "Apple TV",
-        "AC:BC:32": "Apple AirPort Express",
-        "A4:B1:97": "Apple MacBook Air",
-        "3C:22:FB": "Apple iMac",
-        "88:E9:FE": "Apple Mac Studio",
-        "F0:18:98": "Apple Mac mini",
-        
-        # Dispositivos de Rede - TP-Link
-        "00:50:C2": "TP-Link Router",
-        "00:1D:D8": "TP-Link Access Point",
-        "6C:19:8F": "TP-Link Wireless",
-        "C4:E9:84": "TP-Link Router",
-        "EC:08:6B": "TP-Link Archer",
-        "50:C7:BF": "TP-Link Deco",
-        "B0:A7:B9": "TP-Link Range Extender",
-        "14:CC:20": "TP-Link TL Series",
-        "18:D6:C7": "TP-Link Omada",
-        
-        # D-Link
-        "00:22:B0": "D-Link Router",
-        "00:1F:1F": "D-Link Switch",
-        "D8:50:E6": "D-Link Wireless",
-        "1C:7E:E5": "D-Link DIR Series",
-        "34:08:04": "D-Link DWR Series",
-        "C8:D3:A3": "D-Link DAP Series",
-        
-        # Linksys
-        "00:07:7D": "Linksys Router",
-        "00:13:46": "Linksys WRT",
-        "00:26:5A": "Linksys E-Series",
-        "48:F8:B3": "Linksys EA Series",
-        "20:AA:4B": "Linksys Velop",
-        
-        # Cisco
-        "00:18:39": "Cisco Router",
-        "00:21:29": "Cisco Switch",
-        "00:24:01": "Cisco Access Point",
-        "CC:EF:48": "Cisco Meraki",
-        "88:43:E1": "Cisco Catalyst",
-        
-        # Netgear
-        "28:C6:8E": "Netgear Router",
-        "00:90:A9": "Netgear Switch",
-        "00:A0:C8": "Netgear Wireless",
-        "A0:40:A0": "Netgear Nighthawk",
-        "9C:3D:CF": "Netgear Orbi",
-        
-        # Samsung
-        "00:12:FB": "Samsung Smart TV",
-        "34:7E:5C": "Samsung Galaxy",
-        "78:1F:DB": "Samsung SmartThings",
-        "8C:77:12": "Samsung Galaxy Tab",
-        "E8:50:8B": "Samsung Smart TV",
-        
-        # LG
-        "B4:E6:2D": "LG Smart TV",
-        "00:E0:91": "LG Electronics",
-        "64:E5:99": "LG WebOS TV",
-        
-        # Google/Nest
-        "DA:A1:19": "Google Chromecast",
-        "6C:AD:F8": "Google Nest",
-        "F4:F5:D8": "Google Home",
-        "CC:22:3D": "Google Pixel",
-        "18:B4:30": "Google Nest Hub",
-        
-        # Amazon
-        "FC:A6:67": "Amazon Echo",
-        "44:65:0D": "Amazon Fire TV",
-        "84:D6:D0": "Amazon Kindle",
-        "F0:81:73": "Amazon Echo Dot",
-        "B0:7C:B2": "Amazon Echo Show",
-        
-        # Xiaomi
-        "20:34:FB": "Xiaomi Mi Device",
-        "64:16:66": "Xiaomi Redmi",
-        "AC:5A:FC": "Xiaomi Router",
-        "28:6D:CD": "Xiaomi Mi Box",
-        "8C:BE:BE": "Xiaomi Mi Band",
-        "DC:44:27": "Xiaomi Mi Pad",
-        
-        # Raspberry Pi
-        "B8:27:EB": "Raspberry Pi Foundation",
-        "DC:A6:32": "Raspberry Pi Trading",
-        "E4:5F:01": "Raspberry Pi 4",
-        "28:CD:C1": "Raspberry Pi",
-        
-        # Máquinas Virtuais
-        "00:50:56": "VMware ESX Server",
-        "00:0C:29": "VMware Workstation",
-        "00:05:69": "VMware GSX Server",
-        "08:00:27": "Oracle VirtualBox",
-        "52:54:00": "QEMU/KVM Virtual Machine",
-        "00:16:3E": "Xen Virtual Machine",
-        "00:15:5D": "Microsoft Hyper-V",
-        
-        # Outros dispositivos comuns
-        "00:50:FC": "Realtek Semiconductor",
-        "00:C0:02": "Sercomm Corporation",
-        "00:E0:4C": "Realtek PCIe GBE",
-        "00:17:88": "Philips Hue Bridge",
-        "18:B7:9E": "Sonos Speaker",
-        "5C:AA:FD": "Sonos Play",
-    }
+    OUI_DATABASE_FILE = "oui_database.json"
+
+    def __init__(self):
+        self.OUI_DATABASE = self._load_oui_database()
+
+    def _load_oui_database(self) -> Dict[str, str]:
+        """Carrega a base de dados OUI de um arquivo JSON."""
+        try:
+            with open(self.OUI_DATABASE_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except FileNotFoundError:
+            print(f"{Fore.RED}ERRO: Arquivo da base OUI '{self.OUI_DATABASE_FILE}' não encontrado.{Style.RESET_ALL}")
+            return {}
+        except json.JSONDecodeError:
+            print(f"{Fore.RED}ERRO: Falha ao decodificar o arquivo JSON da base OUI '{self.OUI_DATABASE_FILE}'.{Style.RESET_ALL}")
+            return {}
+        except Exception as e:
+            print(f"{Fore.RED}ERRO: Ocorreu um erro inesperado ao carregar a base OUI: {e}{Style.RESET_ALL}")
+            return {}
 
 # ===========================================================================================
 # MÓDULO 2: UTILITÁRIOS E VERIFICAÇÕES DE AMBIENTE
 # ===========================================================================================
+
+def is_valid_ip(ip_string: str) -> bool:
+    """
+    Valida se uma string fornecida é um endereço IP (IPv4 ou IPv6) válido.
+    Retorna True se válido, False caso contrário.
+    """
+    try:
+        ipaddress.ip_address(ip_string)
+        return True
+    except ValueError:
+        return False
 
 class ColorManager:
     """Gerenciador de cores com fallback para sistemas sem colorama"""
@@ -629,33 +542,56 @@ class DeviceScanner:
             return []
         
         active_hosts = []
-        total = net.num_addresses - 2 if net.num_addresses > 2 else net.num_addresses
-        ips = [str(ip) for ip in net.hosts()]
-        
-        print(self.cm.yellow(f"⏳ Pingando {len(ips)} endereços (ICMP)..."))
-        if TQDM_AVAILABLE:
-            bar = tqdm(total=len(ips), desc="Ping Sweep", ncols=80)
-        else:
-            bar = None
-        
-        for ip in ips:
+        ips_to_scan = [str(ip) for ip in net.hosts()]
+
+        if not ips_to_scan:
+            print(self.cm.yellow("⚠️  Nenhum IP para escanear no range fornecido (excluindo endereço de rede e broadcast)."))
+            return []
+
+        print(self.cm.yellow(f"⏳ Pingando {len(ips_to_scan)} endereços (ICMP fallback, paralelo)..."))
+
+        def ping_ip(ip_addr: str) -> Optional[str]:
+            """Tenta pingar um único IP e retorna o IP se ativo, None caso contrário."""
             try:
-                result = subprocess.run(['ping', '-c', '1', '-W', '1', ip], capture_output=True, text=True, timeout=2)
-                if result.returncode == 0:
-                    active_hosts.append(ip)
-            except Exception:
+                # Timeout de 1 segundo para o ping, -W 1000 (em ms para macOS/Linux)
+                # -n 1 (Windows) ou -c 1 (Linux/macOS)
+                ping_param = '-c' if sys.platform != 'win32' else '-n'
+                timeout_param = '1' # Segundos para subprocess.run timeout
+                deadline_or_wait_param = '-W' if sys.platform == 'darwin' else '-w' # -W para macOS, -w para Linux (deadline/timeout em segundos)
+
+                process = subprocess.run(
+                    ['ping', ping_param, '1', deadline_or_wait_param, '1', ip_addr],
+                    capture_output=True, text=True, timeout=float(timeout_param) + 0.5 # Timeout um pouco maior para o subprocesso
+                )
+                if process.returncode == 0:
+                    return ip_addr
+            except subprocess.TimeoutExpired:
+                # print(f"Timeout pingando {ip_addr}") # Debug
                 pass
-            if bar:
-                bar.update(1)
+            except Exception as e:
+                # print(f"Erro pingando {ip_addr}: {e}") # Debug
+                pass
+            return None
+
+        with ThreadPoolExecutor(max_workers=self.config.MAX_THREADS * 2) as executor: # Usar mais threads para I/O bound pings
+            # Usar list() para garantir que todos os pings sejam concluídos antes de prosseguir
+            # e para que o tqdm possa ter o total correto.
+            if TQDM_AVAILABLE:
+                results = list(tqdm(executor.map(ping_ip, ips_to_scan), total=len(ips_to_scan), desc="Fallback Ping Sweep", ncols=80))
             else:
-                print(f"Testando {ip}...", end='\r')
-        if bar:
-            bar.close()
-        print(self.cm.green(f"\n✅ Encontrados {len(active_hosts)} dispositivos ativos (ICMP)"))
+                print("Executando fallback ping sweep (pode demorar)...")
+                # Sem tqdm, podemos apenas esperar que tudo termine
+                futures = [executor.submit(ping_ip, ip) for ip in ips_to_scan]
+                results = [future.result() for future in as_completed(futures)]
+
+
+        active_hosts = [res for res in results if res is not None]
+
+        print(self.cm.green(f"\n✅ Encontrados {len(active_hosts)} dispositivos ativos (ICMP fallback)"))
         if len(active_hosts) == 0:
             print(self.cm.yellow("⚠️  Nenhum host respondeu ao ping ICMP. Verifique firewall, permissões e interface de rede."))
         return active_hosts
-    
+
     def identify_device_by_mac(self, mac_address: Optional[str]) -> Tuple[str, str]:
         """Identificar fabricante e tipo de dispositivo pelo MAC"""
         if not mac_address:
@@ -666,6 +602,11 @@ class DeviceScanner:
         oui = mac_upper[:8]  # Primeiros 3 octetos
         
         # Buscar na base OUI
+        # Assegurar que self.config.OUI_DATABASE não seja None
+        if self.config.OUI_DATABASE is None: # Adicionado para segurança
+            print(self.cm.red("ERRO: Base OUI não carregada em identify_device_by_mac."))
+            return "Erro OUI", "Erro"
+
         device_info = self.config.OUI_DATABASE.get(oui, "Fabricante Desconhecido")
         
         # Determinar categoria do dispositivo
