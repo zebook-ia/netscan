@@ -42,11 +42,10 @@ brew install uv
 uv pip install colorama tqdm
 ```
 
-> **Dica:** O projeto já inclui um `pyproject.toml`. Você pode instalar todas as dependências listadas nele com:
+> **Dica:** As dependências do projeto (`colorama`, `tqdm`) estão definidas no arquivo `pyproject.toml`. O comando acima (`uv pip install colorama tqdm`) é a forma direta de instalá-las usando `uv`.
 >
 > ```sh
-> uv pip install -r requirements.txt  # (se requirements.txt existir)
-> # ou instale manualmente:
+> # Para instalar manualmente as dependências:
 > uv pip install colorama tqdm
 > ```
 
